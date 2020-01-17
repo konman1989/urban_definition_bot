@@ -2,7 +2,9 @@ import re
 import requests
 from telebot import TeleBot, types
 
-bot = TeleBot('914056937:AAHiLz8n6PVBb10YCQh7eBo9JB9W2kAtWJE')
+from config import TOKEN
+
+bot = TeleBot(TOKEN)
 
 
 @bot.message_handler()
@@ -11,17 +13,21 @@ def get_definition(message):
         """Splits text into chunks < 4096 to follow telegram message
         length rules"""
 
-        text_list = text.split('\n\n')
+        text_list = text.split('\n')
         new_text = ""
         for chunk in text_list:
             if chunk:
                 if len(new_text + chunk) < 4096:
-                    new_text += "\n\n" + chunk
+                    new_text += "\n" + chunk
                 else:
-                    bot.send_message(message.chat.id, new_text)
+                    bot.send_message(message.chat.id,
+                                     new_text.replace('Definition',
+                                                      '\nDefinition'))
                     new_text = ""
-                    new_text += "\n\n" + chunk
-        bot.send_message(message.chat.id, new_text)
+                    new_text += "\n" + chunk
+
+        bot.send_message(message.chat.id,
+                         new_text.replace('Definition', '\nDefinition'))
 
     if message.text == '/start':
         bot.send_message(message.chat.id,
