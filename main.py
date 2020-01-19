@@ -3,6 +3,7 @@ import requests
 from telebot import TeleBot, types
 
 from config import TOKEN
+from services import init_json_creation
 
 bot = TeleBot(TOKEN)
 
@@ -59,6 +60,14 @@ def get_definition(message):
     bot.send_message(message.chat.id, '_Choose a word from the list below:_',
                      reply_markup=markup,
                      parse_mode='MarkdownV2')
+
+    to_json = {
+        'id': message.from_user.id,
+        'name': message.from_user.first_name,
+        'definition': [message.text]
+    }
+
+    init_json_creation(to_json)
 
 
 if __name__ == '__main__':
