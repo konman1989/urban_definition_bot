@@ -66,7 +66,6 @@ def get_definition(message):
         'name': message.from_user.first_name,
         'definition': [message.text]
     }
-
     init_json_creation(to_json)
 
 
